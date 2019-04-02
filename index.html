@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+  COMP3801 Winter 2018 Lab 7 Sample Solution
+
+Edited by Ben Schulz and Ram Adhikari for Assignment03
+
+We added a model rotating around a rotating model as well as distance based fog. 
+We have a moon rotating around the earth rotating around the sun. 
+For the fog, if you move the 'Distance from Viewer' the models will become more enveloped in fog. 
+If you pay attention to the rotating planets, you will see that they fade in and out when they get further away as well. The fog color is black. 
+
+You can also rotate the whole scene around the center of the sun by clicking and dragging the mouse. 
+
+  @author Mike Goss <mikegoss@cs.du.edu>
+-->
+<html>
+  <head>
+    <title>Assignment03 - Group 4</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Common/webgl-utils.js" type="text/javascript"></script>
+    <script src="Common/initShaders2.js" type="text/javascript"></script>
+    <script src="Common/MV.js" type="text/javascript"></script>
+    <script src="Common/MatrixStack.js" type="text/javascript"></script>
+    <script src="Common/LoadJSON.js" type="text/javascript"></script>
+    <script src="ModelInterfaceL7.js" type="text/javascript"></script>
+    <!--<script src="JSONModelL7.js" type="text/javascript"></script>-->
+    <script src="SphereL7.js" type="text/javascript"></script>
+    <script src="SceneL7.js" type="text/javascript"></script>
+  </head>
+  <body onload="globalScene = new Scene('gl-canvas', 'Assignment03Scene.json')">
+    <canvas id="gl-canvas" width="640" height="480" tabindex="1">
+      <!--(specify tabindex for canvas to allow keyboard input)-->
+      This browser doesn't support the HTML5 canvas element
+    </canvas>
+    <table style="text-align: center; font-family: sans-serif">
+      <tr>
+        <td><label for="gl-canvas-fov-slider">FOV</label></td>
+        <td><input id="gl-canvas-fov-slider" type="range" min="1" max="179" 
+                   style="width:300px"
+                   onchange="SliderUpdate('gl-canvas-fov-slider-output', value)"
+                   oninput="SliderUpdate('gl-canvas-fov-slider-output', value)"/></td>
+        <td style="width: 50px"><output for="gl-canvas-fov-slider" id="gl-canvas-fov-slider-output">?</output></td>
+      </tr>
+      <tr>
+        <td><label for="gl-canvas-near-slider">Near</label></td>
+        <td><input id="gl-canvas-near-slider" type="range" min="0.1" max="10.0" step="0.01"
+                   style="width:300px"
+                   onchange="SliderUpdate('gl-canvas-near-slider-output', value)"
+                   oninput="SliderUpdate('gl-canvas-near-slider-output', value)"/></td>
+        <td style="width: 50px"><output for="gl-canvas-near-slider" id="gl-canvas-near-slider-output">?</output></td>
+      </tr>
+      <tr>
+        <td><label for="gl-canvas-far-slider">Far</label></td>
+        <td><input id="gl-canvas-far-slider" type="range" min="0.1" max="20.0" step="0.01"
+                   style="width:300px"
+                   onchange="SliderUpdate('gl-canvas-far-slider-output', value)"
+                   oninput="SliderUpdate('gl-canvas-far-slider-output', value)"/></td>
+        <td style="width: 50px"><output for="gl-canvas-far-slider" id="gl-canvas-far-slider-output">?</output></td>
+      </tr>
+      <tr>
+        <td><label for="gl-canvas-z-slider">Distance from Viewer</label></td>
+        <td><input id="gl-canvas-z-slider" type="range" min="0.1" max="20.0" step="0.1" value="10.0"
+                   style="width:300px"
+                   onchange="SliderUpdate('gl-canvas-z-slider-output', value)"
+                   oninput="SliderUpdate('gl-canvas-z-slider-output', value)"/></td>
+        <td style="width: 50px"><output for="gl-canvas-z-slider" id="gl-canvas-z-slider-output">10</output></td>
+      </tr>
+<!--
+      <tr>
+        <td><label for="gl-canvas-t-slider">t scale</label></td>
+        <td><input id="gl-canvas-t-slider" type="range" min="0.1" max="4.0" step="0.01" value="1"
+                   style="width:300px"
+                   onchange="SliderUpdate('gl-canvas-t-slider-output', value)"
+                   oninput="SliderUpdate('gl-canvas-t-slider-output', value)"/></td>
+        <td style="width: 50px"><output for="gl-canvas-t-slider" id="gl-canvas-t-slider-output">1</output></td>
+      </tr>-->
+    </table>
+    <!--    Script to update sliders-->
+    <script type="text/javascript">
+      function SliderUpdate(which, v) { document.getElementById(which).value = v; }
+    </script>
+    <div style="font-family: sans-serif">
+      <br />
+      Perspective<input type="checkbox" id="gl-canvas-projection" /><br />
+      <br />
+      Show Texture<input type="checkbox" id="gl-canvas-show-texture" checked/><br />
+      <br />
+<!--      Magnification LINEAR<input type="checkbox" id="gl-canvas-mag-linear" /><br />
+      <br />
+      Minification MIPmap<input type="checkbox" id="gl-canvas-min-mipmap" /><br />
+      <br />-->
+      <button type="button" onclick="globalScene.ResetCamera()">Reset Scene</button>
+    </div>
+  </body>
+</html>
