@@ -10,9 +10,9 @@
 // prototype when the Scene is instantiated, and JSON models loaded from
 // URLs are added to the list.
 Scene.prototype.predefinedModels = [
-  { "name" : "Sphere2", "prototype" : Sphere, "constructorParams" : [ 4 , "/Textures/2k_moon.jpg"] },
-  { "name" : "Sphere3", "prototype" : Sphere, "constructorParams" : [ 4 , "/Textures/2k_earth.jpg"] },
-  { "name" : "Sphere4", "prototype" : Sphere, "constructorParams" : [ 4 , "/Textures/2k_sun.jpg"] }
+  { "name" : "Sphere2", "prototype" : Sphere, "constructorParams" : [ 4 , "./Textures/2k_moon.jpg"] },
+  { "name" : "Sphere3", "prototype" : Sphere, "constructorParams" : [ 4 , "./Textures/2k_earth.jpg"] },
+  { "name" : "Sphere4", "prototype" : Sphere, "constructorParams" : [ 4 , "./Textures/2k_sun.jpg"] }
 ];
 
 /*
