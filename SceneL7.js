@@ -148,7 +148,7 @@ function Scene(canvasID, sceneURL) {
       var y = e.pageY - e.target.offsetTop;
       var deltaY = t.mouseDownY - y;
       t.mouseRX = deltaX * 0.5 + t.mouseDownRX;
-      t.mouseRY = -deltaY * 0.5 + t.mouseDownRY;
+      t.mouseRY = deltaY * 0.5 + t.mouseDownRY;
     }
   });
 
@@ -208,10 +208,9 @@ Scene.prototype.Redraw = function() {
   // Build mouse rotation matrix
   var lookAtDist = length(subtract(camera.location, camera.lookAt));
   matrixStack.MultMatrix(translate(0, 0, -lookAtDist));
-  matrixStack.MultMatrix(rotate(this.mouseRY, 1, 0, 0));
-  matrixStack.MultMatrix(rotate(this.mouseRX, 0, 0, 1));
+  matrixStack.MultMatrix(mult(rotateY(this.mouseRX), rotateX(this.mouseRY)));
   matrixStack.MultMatrix(translate(0, 0, lookAtDist));
-  
+
   // Build view transform
   var viewMat = lookAt(camera.location, camera.lookAt, camera.approxUp);
   matrixStack.MultMatrix(viewMat);
@@ -232,31 +231,31 @@ Scene.prototype.Redraw = function() {
     var jModel = this.jScene.models[i];
     var ms = scalem(jModel.scale);
     var mrz = rotateZ(this.rotateAmts[i]);
-    var mry = rotateY(this.rotateAmts[i]);
-    var mr = mult(rotateY(this.rotateAmts[i]), rotateX(this.rotateAmts[i]));
 
     var transform = translate(0,0,0);
     var mf = mat4(jModel.xBasis[0], jModel.yBasis[0], jModel.zBasis[0], 0.0,
                   jModel.xBasis[1], jModel.yBasis[1], jModel.zBasis[1], 0.0,
                   jModel.xBasis[2], jModel.yBasis[2], jModel.zBasis[2], 0.0,
-                  0.0,              0.0,              0.0,              1.0);
-                  
-        if (i === 2) {
-            var mt1 = translate(1.0,0.0,0.0);
-            var mt2 = translate(-1.0,0.0,0.0);
-            var mt3 = translate(jModel.location);
-            transform = mult(mult(rotateY(this.rotateAmts[1]), rotateX(this.rotateAmts[1])), mult(mt3, mult(mt2, mult(mrz, mult(mt1, mult(mry, mult(mf, ms)))))));
-//            console.log(mt2);
-        } else {
-            var mt = translate(jModel.location);
-            transform = mult(mr, mult(mt, mult(mf, ms))));
-        }
-    
-        if (i === 0 || i === 1) {
-             this.rotateAmts[i] += 0.5;
-        } else if (i === 2) {
-            this.rotateAmts[i] += 1.5;
-        }
+
+    switch (i) {
+      case 0:
+        transform = mult(mf, mrz);
+        this.rotateAmts[i] += 0.5;
+        break;
+      case 1: 
+        var mt = translate(jModel.location);
+        transform = mult(mrz, mult(mt, mult(mrz, mult(mf, ms))));
+        this.rotateAmts[i] += 1.0;
+        break;
+      case 2: 
+        var mt1 = translate(1.0,0.0,0.0);
+        var mt2 = translate(-1.0,0.0,0.0);
+        var mt3 = translate(jModel.location);
+        transform = mult(mult(rotateZ(this.rotateAmts[1]), rotateX(this.rotateAmts[1])), 
+                    mult(mt3, mult(mt2, mult(mrz, mult(mt1, mult(mrz, mult(mf, ms)))))));
+        this.rotateAmts[i] += 2.5;
+        break;
+    }               
    
     matrixStack.MultMatrix(transform);
     this.loadedModels[i].Redraw(matrixStack, projection, lightsViewCoords,
