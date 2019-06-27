@@ -249,7 +249,7 @@ Scene.prototype.Redraw = function() {
 //            console.log(mt2);
         } else {
             var mt = translate(jModel.location);
-            transform = mult(mr, mult(mt, mult(mry, mult(mf, ms))));
+            transform = mult(mr, mult(mt, mult(mf, ms))));
         }
     
         if (i === 0 || i === 1) {
