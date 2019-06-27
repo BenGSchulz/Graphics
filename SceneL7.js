@@ -236,7 +236,6 @@ Scene.prototype.Redraw = function() {
     var mf = mat4(jModel.xBasis[0], jModel.yBasis[0], jModel.zBasis[0], 0.0,
                   jModel.xBasis[1], jModel.yBasis[1], jModel.zBasis[1], 0.0,
                   jModel.xBasis[2], jModel.yBasis[2], jModel.zBasis[2], 0.0,
-                  0.0,              0.0,              0.0,              1.0);
 
     switch (i) {
       case 0:
@@ -249,16 +248,11 @@ Scene.prototype.Redraw = function() {
         this.rotateAmts[i] += 1.0;
         break;
       case 2: 
-      var mt1 = translate(1.0,0.0,0.0);
-      var mt2 = translate(-1.0,0.0,0.0);
-      var mt3 = translate(jModel.location);
-      transform = mult(mult(rotateZ(this.rotateAmts[1]), rotateX(this.rotateAmts[1])), 
-                  mult(mt3, mult(mt2, mult(mrz, mult(mt1, mult(mrz, mult(mf, ms)))))));
-      // var mt = translate(jModel.location);
-        // var t1 = translate(1.0,0.0,0.0);
-        // var t2 = translate(-1.0,0.0,0.0);
-        // transform = mult(mult(rotateY(this.rotateAmts[1]), rotateX(this.rotateAmts[1])), 
-        //             mult(mt, mult(mrz, mult(mf, ms))));
+        var mt1 = translate(1.0,0.0,0.0);
+        var mt2 = translate(-1.0,0.0,0.0);
+        var mt3 = translate(jModel.location);
+        transform = mult(mult(rotateZ(this.rotateAmts[1]), rotateX(this.rotateAmts[1])), 
+                    mult(mt3, mult(mt2, mult(mrz, mult(mt1, mult(mrz, mult(mf, ms)))))));
         this.rotateAmts[i] += 2.5;
         break;
     }               
