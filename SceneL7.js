@@ -236,6 +236,7 @@ Scene.prototype.Redraw = function() {
     var mf = mat4(jModel.xBasis[0], jModel.yBasis[0], jModel.zBasis[0], 0.0,
                   jModel.xBasis[1], jModel.yBasis[1], jModel.zBasis[1], 0.0,
                   jModel.xBasis[2], jModel.yBasis[2], jModel.zBasis[2], 0.0,
+                  0.0,              0.0,              0.0,              1.0);
 
     switch (i) {
       case 0:
